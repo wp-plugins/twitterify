@@ -4,7 +4,7 @@ Donate link: http://shailan.com/donate
 Tags: tags, hashtag, @link, author links, autolink, auto-link, nofollow, twitter, twitter-like, filter, content, excerpt, convert
 Requires at least: 3.0
 Tested up to: 3.1
-Stable tag: 1.0
+Stable tag: 1.1
 
 Enables use of **autolink**, **#hashtags** and **@author** links on your posts. **Links are not directed to twitter. They provide this functionality on your site.**
 
@@ -29,6 +29,9 @@ This plugin automatically converts **hashtags** (like #wordpress) to tag links, 
 You can ask your questions [here](http://shailan.com/wordpress/plugins/twitterify/)
 
 == Changelog ==
+
+= 1.1 =
+* Fixed the code to autolink links with a space infront of them. This will prevent linking href attributes in the code.
 
 = 1.0 =
 * First release.

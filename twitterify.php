@@ -3,7 +3,7 @@
 Plugin Name: Twitterify
 Plugin URI: http://shailan.com/wordpress/plugins/twitterify
 Description: Enables use of <strong>autolink</strong>, <strong>#hashtags</strong> and <strong>@author</strong> links on your posts. <strong>Links are not directed to twitter. They provide this functionality on your site.</strong>
-Version: 1.0
+Version: 1.1
 Author: Matt Say
 Author URI: http://shailan.com
 */
@@ -11,13 +11,17 @@ Author URI: http://shailan.com
 function twitterify_content ( $text ){
 
 	// Make content clickable
-	$text = make_clickable( $text );
+	//$text = make_clickable( $text );
+	
+	$ret = ' ' . $text;
+    $ret = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t<]*)#ise", "'\\1<a target=\"_blank\" rel=\"nofollow\" href=\"\\2\" >\\2</a>'", $ret);
+    $ret = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r<]*)#ise", "'\\1<a target=\"_blank\" rel=\"nofollow\" href=\"http://\\2\" >\\2</a>'", $ret);
 	
 	// Remove http://
-	$text = preg_replace( '/(">http:\/\/)(.*?)<\/a>/i', "\">$2</a>", $text ); 
+	$ret = preg_replace( '/(">http:\/\/)(.*?)<\/a>/i', "\">$2</a>", $ret ); 
 	
 	 // Remove www.
-	$text = preg_replace( '/(">www.)(.*?)<\/a>/i', "\">$2</a>", $text );
+	$ret = preg_replace( '/(">www.)(.*?)<\/a>/i', "\">$2</a>", $ret );
 	
 	// Check permalink structure
 	if ( get_option('permalink_structure') != '' ) { 
@@ -45,14 +49,14 @@ function twitterify_content ( $text ){
 	
     // Author links
     $twitter = "/ @([A-Za-z0-9_]+)/is";
-    $text = preg_replace ($twitter, " <a href='" . home_url($author_base) . "$1'>@$1</a>", $text);
+    $ret = preg_replace ($twitter, " <a href='" . home_url($author_base) . "$1'>@$1</a>", $ret);
 
     // Hashtags
     $hashtag = "/ #([A-Aa-z0-9_-]+)/is";
-    $text = preg_replace ($hashtag, " <a href='" . home_url($tag_base) . "$1'>#$1</a>", $text);
+    $ret = preg_replace ($hashtag, " <a href='" . home_url($tag_base) . "$1'>#$1</a>", $ret);
 	
 	// Return post content
-    return $text;
+    return $ret;
 	
 } 
 
