@@ -192,14 +192,30 @@ class stf_twitterify {
 	}
 
 	function twitterify_content ( $content ){
-		$content = preg_replace_callback ( "#(.*?)<(code|pre)*>(.*?)<\/(pre|code)*>#is", array( &$this, 'twitterify_text' ), $content );
+		
+		$content = preg_replace_callback ( "#(.*?)(\<([a-z]+)[^\>]*\>([^\<]*?)\<\/(\\3)[^\>]*\>)(.*?)#is", array( &$this, 'twitterify_filter_codes' ), $content );
 		return $content;
-	} 
+	}
 	
-	function twitterify_text( $matches ){
-		$ret = ' ' . $matches[3];
+	function twitterify_filter_codes( $matches = array() ){
+		
+		//return print_r($matches, false);
+		
+		if( $matches[3] != 'code' && $matches[3] != 'pre' ){
+			return $this->twitterify_text( $matches[0] );
+		} else {
+			return $matches[0];
+		}
+		
+	}
+	
+	function twitterify_text( $text ){
+		$ret = ' ' . $text;
 		$ret = preg_replace("#(^|[\n> ])([\w]+?://[\w]+[^ \"\n\r\t<]*)#ise", "'\\1<a target=\"_blank\" rel=\"nofollow\" href=\"\\2\" >\\2</a>'", $ret);
 		$ret = preg_replace("#(^|[\n> ])((www|ftp)\.[^ \"\t\n\r<]*)#ise", "'\\1<a target=\"_blank\" rel=\"nofollow\" href=\"http://\\2\" >\\2</a>'", $ret);
+		
+		// .com/test
+		$ret = preg_replace("#(^|[\n> ])([a-zA-Z0-9-]+\.[a-zA-Z.]{2,5})(\/[a-zA-Z0-9-]+)*#ise", "'\\1<a target=\"_blank\" rel=\"nofollow\" href=\"http://\\2\\3\" >\\2\\3</a>'", $ret);
 		
 		// Remove http://
 		$ret = preg_replace( '/(>http:\/\/)(.*?)<\/a>/i', ">$2</a>", $ret ); 
@@ -212,11 +228,11 @@ class stf_twitterify {
 		$ret = preg_replace_callback ( $author_pattern, array( &$this, 'twitterify_author_callback' ), $ret );
 
 		// Hashtags
-		$hashtag_pattern = "{([^//])#([A-Za-z0-9_-]+)}is";
+		$hashtag_pattern = "{([^&//])#([A-Za-z0-9_-]+)}is";
 		$ret = preg_replace_callback ( $hashtag_pattern, array( &$this, 'twitterify_tag_callback' ), $ret );
 		
 		// Return post content
-		return $ret;
+		return substr( $ret, 1 );
 	}
 
 	// Check if author exists
@@ -247,14 +263,14 @@ class stf_twitterify {
 		if( 'on' == $this->get_plugin_setting('hide_hash') )
 			$hash = '';
 			
-		$hashtags_link_to = $this->get_plugin_setting('hashtags_link_to');
+		$hashtags_link_to = $this->get_plugin_setting( 'hashtags_link_to' );
 		
-		if( 'tags' == $hashtags_link_to ){
-			$hash_base = home_url( $this->tag_base );
+		if( 'twitter' == $hashtags_link_to ){
+			$hash_base = "http://twitter.com/search?q=%23";
 		} elseif ( 'search' == $hashtags_link_to ){
 			$hash_base = home_url( '?s=' );
 		} else {
-			$hash_base = "http://twitter.com/search?q=%23";
+			$hash_base = home_url( $this->tag_base );
 		}
 		
 		return $matches[1] . " <a href='" . $hash_base . "". $matches[2] ."'>" . $hash . $matches[2] . "</a>";
