@@ -3,7 +3,7 @@
 Plugin Name: Twitterify
 Plugin URI: http://shailan.com/wordpress/plugins/twitterify
 Description: Enables use of <strong>autolink</strong>, <strong>#hashtags</strong> and <strong>@author</strong> links on your posts. <strong>Links are not directed to twitter. They provide this functionality on your site.</strong>
-Version: 1.2beta
+Version: 1.2
 Author: Matt Say
 Author URI: http://shailan.com
 */
