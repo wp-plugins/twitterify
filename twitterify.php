@@ -187,7 +187,7 @@ class stf_twitterify {
 		
 		$footer_text = '<em><a href="http://shailan.com/wordpress/plugins/twitterify/">Twitterify</a> by <a href="http://shailan.com/">SHAILAN </a></em>';
 		
-		include_once( "/inc/stf-page-options.php" );
+		include_once( dirname(__FILE__) . "/inc/stf-page-options.php" );
 
 	}
 
