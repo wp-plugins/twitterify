@@ -1,7 +1,7 @@
 ﻿=== Twitterify ===
 Contributors: mattsay
 Donate link: http://shailan.com/donate
-Tags: tags, hashtag, @link, author links, autolink, auto-link, nofollow, twitter, twitter-like, filter, content, excerpt, convert
+Tags: tags, hashtag, @link, author links, autolink, auto-link, nofollow, twitter, twitter-like, filter, content, excerpt, convert, UPDATE
 Requires at least: 3.0
 Tested up to: 3.2.1
 Stable tag: 1.2
